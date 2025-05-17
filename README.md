@@ -32,11 +32,10 @@ Antes de empezar, asegúrate de tener instalado lo siguiente:
 
 ## Instalación
 
-1.  **Clona este repositorio o descarga los archivos:**
-    Si es un repositorio:
+1.  **Clona este repositorio o descarga los archivos:**:
     ```bash
-    git clone [https://github.com/TU_USUARIO/TU_REPOSITORIO.git](https://github.com/TU_USUARIO/TU_REPOSITORIO.git)
-    cd TU_REPOSITORIO
+    git clone https://github.com/J27REPO/integracion-gemini-terminal.git
+    cd integracion-gemini-terminal
     ```
     Si solo tienes los archivos (`gemini_query.py` y el script con `command_not_found_handler`), asegúrate de tenerlos en tu máquina local. Necesitarás:
     * El script de Zsh que contiene `command_not_found_handler` (ej. podrías guardarlo como `~/.config/zsh/gemini_zsh_integration.zsh`).
