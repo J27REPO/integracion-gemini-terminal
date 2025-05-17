@@ -2,7 +2,7 @@
 
 Este proyecto te permite realizar consultas a la API de Gemini de Google directamente desde tu terminal Zsh. Cualquier comando que no sea reconocido por Zsh será interpretado como un prompt para Gemini.
 
-**¡Atención! Riesgo de seguridad:** El script de Zsh proporcionado en el ejemplo original contiene un placeholder para una API Key (`"TU_CLAVE_API"`) dentro de la función `command_not_found_handler`. **NUNCA subas API Keys reales directamente a repositorios públicos.** Este README y las instrucciones asumen que gestionarás tu API Key de forma segura como una variable de entorno, que es la práctica recomendada para el uso real.
+**¡Atención! Gestión de API Keys:** Recuerda que tu API Key de Gemini es información sensible. **NUNCA subas API Keys reales directamente a repositorios públicos.** Este README y las instrucciones asumen que gestionarás tu API Key de forma segura como una variable de entorno, que es la práctica recomendada.
 
 ## Características
 
@@ -38,9 +38,9 @@ Antes de empezar, asegúrate de tener instalado lo siguiente:
     git clone [https://github.com/TU_USUARIO/TU_REPOSITORIO.git](https://github.com/TU_USUARIO/TU_REPOSITORIO.git)
     cd TU_REPOSITORIO
     ```
-    Si solo tienes los archivos, créalos manualmente. Necesitarás:
-    * Un archivo para el script de Zsh (ej. `gemini_zsh_integration.zsh`)
-    * Un archivo para el script de Python (ej. `gemini_query.py`)
+    Si solo tienes los archivos (`gemini_query.py` y el script con `command_not_found_handler`), asegúrate de tenerlos en tu máquina local. Necesitarás:
+    * El script de Zsh que contiene `command_not_found_handler` (ej. podrías guardarlo como `~/.config/zsh/gemini_zsh_integration.zsh`).
+    * El script de Python `gemini_query.py`.
 
 2.  **Coloca el script de Python en la ubicación deseada:**
     El script de Zsh espera encontrar `gemini_query.py` en `$HOME/.config/zsh/gemini_query.py` por defecto.
@@ -48,7 +48,7 @@ Antes de empezar, asegúrate de tener instalado lo siguiente:
     mkdir -p $HOME/.config/zsh
     cp gemini_query.py $HOME/.config/zsh/gemini_query.py
     ```
-    Si usas una ruta diferente, asegúrate de actualizar la variable `python_script_path` en el script de Zsh.
+    Si usas una ruta diferente para `gemini_query.py`, asegúrate de actualizar la variable `python_script_path` en el script de Zsh.
 
 3.  **Haz ejecutable el script de Python:**
     ```bash
@@ -64,8 +64,7 @@ Antes de empezar, asegúrate de tener instalado lo siguiente:
 ## Configuración
 
 1.  **Configura tu API Key de Gemini (¡IMPORTANTE Y SEGURO!):**
-    **NO hardcodees tu API Key real directamente en los scripts que compartes o versionas.**
-    La forma más segura y recomendada es establecerla como una variable de entorno en tu archivo de configuración de Zsh (`~/.zshrc`):
+    La forma más segura y recomendada es establecer tu `GEMINI_API_KEY` como una variable de entorno en tu archivo de configuración de Zsh (`~/.zshrc`):
 
     ```bash
     echo 'export GEMINI_API_KEY="TU_CLAVE_API_REAL_AQUI"' >> ~/.zshrc
@@ -75,15 +74,14 @@ Antes de empezar, asegúrate de tener instalado lo siguiente:
     ```bash
     source ~/.zshrc
     ```
-    O abre una nueva terminal.
-
+    O abre una nueva terminal. El script Zsh (`command_not_found_handler`) ya está preparado para usar esta variable de entorno.
 
 2.  **Integra la función `command_not_found_handler` en tu Zsh:**
-    Copia el contenido del script de Zsh (el que contiene la función `command_not_found_handler`, **ya modificado según la recomendación anterior para no establecer la API key dentro de la función**) y pégalo al final de tu archivo `~/.zshrc`.
+    Copia el contenido de tu script Zsh (el que contiene la función `command_not_found_handler`) y pégalo al final de tu archivo `~/.zshrc`.
 
-    Alternativamente, si guardaste el código Zsh en un archivo (por ejemplo, `~/.config/zsh/gemini_integration.zsh`), puedes añadir la siguiente línea a tu `~/.zshrc` para cargarlo:
+    Alternativamente, si guardaste el código Zsh en un archivo separado (por ejemplo, `~/.config/zsh/gemini_zsh_integration.zsh`), puedes añadir la siguiente línea a tu `~/.zshrc` para cargarlo:
     ```bash
-    echo 'source $HOME/.config/zsh/gemini_integration.zsh' >> ~/.zshrc
+    echo 'source $HOME/.config/zsh/gemini_zsh_integration.zsh' >> ~/.zshrc
     ```
 
 3.  **Recarga la configuración de tu Zsh:**
@@ -94,20 +92,21 @@ Antes de empezar, asegúrate de tener instalado lo siguiente:
 
 ## Uso
 
-Una vez configurado (y asegurándote de que la `GEMINI_API_KEY` se exporta correctamente desde tu `.zshrc` y no desde dentro de la función), cualquier comando que escribas en la terminal Zsh y que no sea un comando conocido, un alias o una función, será enviado a Gemini AI.
+Una vez configurado (asegurándote de que la `GEMINI_API_KEY` se exporta correctamente desde tu `.zshrc`), cualquier comando que escribas en la terminal Zsh y que no sea un comando conocido, un alias o una función, será enviado a Gemini AI.
 
 **Ejemplo:**
 
 Abre tu terminal y escribe:
 ```zsh
 ¿Cuál es la comida típica de Asturias?
-
+```
 Verás primero un mensaje:
-
+```zsh
 Analizando prompt 🤔
+```
 
 Y luego, la respuesta de Gemini (renderizada por glow si está instalado):
-
+```zsh
 *****************************************
 La comida típica de Asturias es rica y variada, destacando por sus productos de mar y montaña. Algunos platos emblemáticos son:
 
@@ -120,28 +119,26 @@ La comida típica de Asturias es rica y variada, destacando por sus productos de
 * **Postres:** Arroz con leche (requemado), frixuelos (parecidos a los crepes), casadielles (empanadillas dulces rellenas de nuez).
 *****************************************
 ```
-
 Personalización
 
-    Modelo de Gemini: Puedes cambiar el modelo de Gemini utilizado editando la variable model_name en el script gemini_query.py.
+    Modelo de Gemini: Puedes cambiar el modelo de Gemini utilizado editando la variable model_name en el script gemini_query.py. Actualmente, tu script usa "gemini-2.5-flash-preview-04-17".
     Python
 
     # En gemini_query.py
-    model_name = "gemini-1.5-flash-latest" # Cambia a otro modelo compatible si lo deseas
+    model_name = "gemini-2.5-flash-preview-04-17" # Cambia a otro modelo compatible si lo deseas
 
     Consulta la documentación de Gemini para ver los modelos disponibles.
 
-    Ruta del script de Python: Si colocaste gemini_query.py en una ubicación diferente a la predeterminada ($HOME/.config/zsh/gemini_query.py), actualiza la variable python_script_path en tu función command_not_found_handler dentro de ~/.zshrc (o el archivo donde la hayas guardado).
+    Ruta del script de Python: Si colocaste gemini_query.py en una ubicación diferente a la predeterminada ($HOME/.config/zsh/gemini_query.py), actualiza la variable python_script_path en tu función command_not_found_handler (en tu .zshrc o en el archivo gemini_zsh_integration.zsh).
 
 Solución de Problemas
 
     "Error: GEMINI_API_KEY no configurada.":
         Asegúrate de haber exportado la variable GEMINI_API_KEY con tu clave real en tu ~/.zshrc.
         Verifica que has recargado la configuración (source ~/.zshrc) o abierto una nueva terminal.
-        Muy importante: Asegúrate de haber eliminado o comentado la línea export GEMINI_API_KEY="TU_CLAVE_API" de dentro de la función command_not_found_handler en tu script Zsh, ya que esta anularía la clave de tu .zshrc.
     "Error: Script de Python no encontrado o no ejecutable...": Verifica que la ruta en python_script_path (en el script Zsh) sea correcta y que el script gemini_query.py tenga permisos de ejecución (chmod +x ruta/al/script.py).
     "Error: Comando 'python3' no encontrado...": Asegúrate de que Python 3 esté instalado y accesible en tu PATH.
-    Errores del script de Python: Los errores específicos del script Python (ej. problemas con la API, modelo incorrecto) se imprimirán en stderr y deberían ser visibles en la terminal. Si la API Key es incorrecta (por ejemplo, si se usa el placeholder "TU_CLAVE_API"), el script Python fallará.
+    Errores del script de Python: Los errores específicos del script Python (ej. problemas con la API, modelo incorrecto, API key inválida) se imprimirán en stderr y deberían ser visibles en la terminal.
 
 Importante: Costos y Límites de la API
 
