@@ -77,26 +77,6 @@ Antes de empezar, asegúrate de tener instalado lo siguiente:
     ```
     O abre una nueva terminal.
 
-    **Nota sobre el código Zsh proporcionado:**
-    Tu script Zsh actual define la `GEMINI_API_KEY` con un placeholder *dentro* de la función `command_not_found_handler`:
-    ```zsh
-    command_not_found_handler() {
-        export GEMINI_API_KEY="TU_CLAVE_API" # ESTA LÍNEA DENTRO DE LA FUNCIÓN
-        local user_input="$*"
-    # ...
-    }
-    ```
-    Si dejas esta línea `export GEMINI_API_KEY="TU_CLAVE_API"` en la función, **esta anulará cualquier `GEMINI_API_KEY` que hayas configurado en tu `.zshrc`** cuando la función se ejecute. Esto significa que el script Python intentará usar `"TU_CLAVE_API"` literalmente, lo cual fallará.
-
-    Para una configuración segura y funcional donde usas tu clave real, **DEBES eliminar o comentar esta línea que asigna `GEMINI_API_KEY` dentro de la función del script de Zsh.** Configura tu API Key real *únicamente* a través de `~/.zshrc` como se recomienda arriba. El script Python (`gemini_query.py`) está diseñado para leer la variable de entorno `GEMINI_API_KEY` que establezcas en tu `.zshrc`.
-
-    **Recomendación:** Modifica tu función `command_not_found_handler` en el script Zsh así:
-    ```diff
-    command_not_found_handler() {
-    -   export GEMINI_API_KEY="TU_CLAVE_API" # ¡ELIMINAR O COMENTAR ESTA LÍNEA!
-        local user_input="$*"
-    ```
-    De esta manera, la función usará la `GEMINI_API_KEY` que hayas exportado desde tu `.zshrc`.
 
 2.  **Integra la función `command_not_found_handler` en tu Zsh:**
     Copia el contenido del script de Zsh (el que contiene la función `command_not_found_handler`, **ya modificado según la recomendación anterior para no establecer la API key dentro de la función**) y pégalo al final de tu archivo `~/.zshrc`.
