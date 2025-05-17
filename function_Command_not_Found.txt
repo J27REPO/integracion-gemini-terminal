@@ -1,0 +1,50 @@
+export GEMINI_API_KEY="TU_CLAVE_API"
+command_not_found_handler() {
+	export GEMINI_API_KEY="AIzaSyB8kdienG5HG4U-52cuQ-3tNpit4lJviVE"
+    local user_input="$*"
+    # Ruta al ejecutable de Python del SISTEMA (asume 'python3' está en el PATH)
+    local system_python="python3"
+    # Ruta al script de Python (donde lo guardaste)
+    local python_script_path="$HOME/.config/zsh/gemini_query.py" #Mi ruta por defecto
+
+    # Comprobación básica de API Key
+    if [[ -z "$GEMINI_API_KEY" ]]; then
+        echo "Error: GEMINI_API_KEY no configurada." >&2
+        echo "zsh: command not found: $1" >&2
+        return 127
+    fi
+
+    # Comprobar si el script Python existe y es ejecutable
+    if [[ ! -x "$python_script_path" ]]; then
+         echo "Error: Script de Python no encontrado o no ejecutable en '$python_script_path'" >&2
+         echo "zsh: command not found: $1" >&2
+         return 127
+    fi
+     # Comprobar si python3 está disponible
+     if ! command -v $system_python &> /dev/null; then
+         echo "Error: Comando '$system_python' no encontrado en el PATH." >&2
+         echo "zsh: command not found: $1" >&2
+         return 127
+    fi
+
+    echo "Analizando prompt 🤔"
+
+    # Llamar al Python del sistema con el script, pasando la entrada como argumentos.
+    local gemini_answer
+    gemini_answer=$("$system_python" "$python_script_path" "$@")
+    local python_exit_status=$?
+
+    # Comprobar si el script Python falló (exit status != 0)
+    if [[ $python_exit_status -ne 0 ]]; then
+        # El script Python ya debería haber impreso su error a stderr.
+        echo "Error: El script de Python falló (exit status $python_exit_status)." >&2
+        return 1 # Indicar fallo
+    else
+        # ¡ÉXITO! Mostrar la respuesta capturada de stdout
+       #echo "💡 Respuesta:"
+        echo "*****************************************"
+        echo "$gemini_answer" | glow
+        echo "*****************************************"
+        return 0 # Indicar éxito
+    fi
+}
