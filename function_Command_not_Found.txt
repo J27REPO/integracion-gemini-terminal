@@ -1,6 +1,6 @@
 export GEMINI_API_KEY="TU_CLAVE_API"
 command_not_found_handler() {
-	export GEMINI_API_KEY="AIzaSyB8kdienG5HG4U-52cuQ-3tNpit4lJviVE"
+	export GEMINI_API_KEY="TU_CLAVE_API"
     local user_input="$*"
     # Ruta al ejecutable de Python del SISTEMA (asume 'python3' está en el PATH)
     local system_python="python3"
