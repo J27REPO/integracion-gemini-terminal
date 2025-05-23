@@ -2,6 +2,8 @@
 
 Este proyecto te permite realizar consultas a la API de Gemini de Google directamente desde tu terminal Zsh. Cualquier comando que no sea reconocido por Zsh será interpretado como un prompt para Gemini.
 
+v2.0: Pequeña integración para agregar relajante música a tu terminal. Va dentro del script, tan solo tendrás que escribrir "music" en tu terminal y disfrutar. 
+
 **¡Atención! Gestión de API Keys:** Recuerda que tu API Key de Gemini es información sensible. **NUNCA subas API Keys reales directamente a repositorios públicos.** Este README y las instrucciones asumen que gestionarás tu API Key de forma segura como una variable de entorno, que es la práctica recomendada.
 
 ## Características
@@ -29,6 +31,11 @@ Antes de empezar, asegúrate de tener instalado lo siguiente:
     * Otras distribuciones: Consulta la [documentación de glow](https://github.com/charmbracelet/glow).
 6.  **Una API Key de Gemini:**
     * Obtén tu API Key desde [Google AI Studio](https://aistudio.google.com/app/apikey).
+  
+7.  **En caso de querer usar integración para música lofi:**
+     * cli-visualizer (yay -S cli-visualizer)
+     * mpv (sudo pacman -S mpv)
+     * yt-dlp (sudo pacman -S yt-dlp)
 
 ## Instalación
 
@@ -142,7 +149,7 @@ Solución de Problemas
 Importante: Costos y Límites de la API
 
 Ten en cuenta que el uso de la API de Gemini puede incurrir en costos dependiendo de tu volumen de uso y el modelo seleccionado. Revisa los términos de precios de Google Cloud para la API de Gemini.
-
+Por defecto, se seleccinó el modelo flash 2.5; obtendrás 500 prompts gratuitos al día. Para un uso normal será más que suficiente
 Dado que cualquier comando no reconocido se envía a la API, podrías generar muchas solicitudes accidentalmente. ¡Usa con precaución!
 Contribuir
 
